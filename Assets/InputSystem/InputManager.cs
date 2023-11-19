@@ -1,14 +1,26 @@
-
 using UnityEngine;
 
 namespace ProjectArtic.InputSystem
 {
     public class InputManager : MonoBehaviour
     {
+        private static InputManager _instance;
+        public static InputManager Instance => _instance;
+
         private PlayerControls _playerControls;
         private void Awake()
         {
-            _playerControls = new PlayerControls();
+            if(_instance != null && _instance != this)
+            {
+                Destroy(this.gameObject);
+            }
+            else
+            {
+                _instance = this;
+            }
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
+           _playerControls = new PlayerControls();
         }
 
         private void OnEnable()

@@ -51,5 +51,11 @@ namespace ProjectArtic.InputSystem
         {
             return _playerControls.Player.Sprint.IsPressed();
         }
+
+        public bool PlayerIntracting()
+        {
+            return _playerControls.Player.Intract.IsPressed();
+        }
+
     }
 }

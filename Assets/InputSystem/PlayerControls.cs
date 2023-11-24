@@ -15,11 +15,8 @@ using System.Collections.Generic;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Utilities;
 
-
 namespace ProjectArtic.InputSystem
 {
-
-
     public partial class @PlayerControls : IInputActionCollection2, IDisposable
     {
         public InputActionAsset asset { get; }
@@ -63,6 +60,15 @@ namespace ProjectArtic.InputSystem
                     ""name"": ""Jump"",
                     ""type"": ""Button"",
                     ""id"": ""64c504cd-c3c0-4eb0-bafd-24c047fa1259"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Intract"",
+                    ""type"": ""Button"",
+                    ""id"": ""a9e3d89c-ab26-473d-8173-d39d211ca322"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -201,6 +207,28 @@ namespace ProjectArtic.InputSystem
                     ""action"": ""Look"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""aafe6ce5-c481-402a-a15f-ade49779feaa"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""Intract"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""54c1be24-9d45-41ad-863f-16c40b629a0a"",
+                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Intract"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -251,6 +279,7 @@ namespace ProjectArtic.InputSystem
             m_Player_Movement = m_Player.FindAction("Movement", throwIfNotFound: true);
             m_Player_Sprint = m_Player.FindAction("Sprint", throwIfNotFound: true);
             m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
+            m_Player_Intract = m_Player.FindAction("Intract", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -316,6 +345,7 @@ namespace ProjectArtic.InputSystem
         private readonly InputAction m_Player_Movement;
         private readonly InputAction m_Player_Sprint;
         private readonly InputAction m_Player_Jump;
+        private readonly InputAction m_Player_Intract;
         public struct PlayerActions
         {
             private @PlayerControls m_Wrapper;
@@ -324,6 +354,7 @@ namespace ProjectArtic.InputSystem
             public InputAction @Movement => m_Wrapper.m_Player_Movement;
             public InputAction @Sprint => m_Wrapper.m_Player_Sprint;
             public InputAction @Jump => m_Wrapper.m_Player_Jump;
+            public InputAction @Intract => m_Wrapper.m_Player_Intract;
             public InputActionMap Get() { return m_Wrapper.m_Player; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -345,6 +376,9 @@ namespace ProjectArtic.InputSystem
                 @Jump.started += instance.OnJump;
                 @Jump.performed += instance.OnJump;
                 @Jump.canceled += instance.OnJump;
+                @Intract.started += instance.OnIntract;
+                @Intract.performed += instance.OnIntract;
+                @Intract.canceled += instance.OnIntract;
             }
 
             private void UnregisterCallbacks(IPlayerActions instance)
@@ -361,6 +395,9 @@ namespace ProjectArtic.InputSystem
                 @Jump.started -= instance.OnJump;
                 @Jump.performed -= instance.OnJump;
                 @Jump.canceled -= instance.OnJump;
+                @Intract.started -= instance.OnIntract;
+                @Intract.performed -= instance.OnIntract;
+                @Intract.canceled -= instance.OnIntract;
             }
 
             public void RemoveCallbacks(IPlayerActions instance)
@@ -402,7 +439,7 @@ namespace ProjectArtic.InputSystem
             void OnMovement(InputAction.CallbackContext context);
             void OnSprint(InputAction.CallbackContext context);
             void OnJump(InputAction.CallbackContext context);
+            void OnIntract(InputAction.CallbackContext context);
         }
     }
-
 }

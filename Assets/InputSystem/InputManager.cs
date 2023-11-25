@@ -57,5 +57,19 @@ namespace ProjectArtic.InputSystem
             return _playerControls.Player.Intract.IsPressed();
         }
 
+        public bool PlayerCrouchingStart()
+        {
+            return _playerControls.Player.Crouch.WasPerformedThisFrame();
+        }
+        public bool PlayerCrouching()
+        {
+            return _playerControls.Player.Crouch.IsPressed();
+        }
+
+        public bool PlayerCrouchingEnd()
+        {
+            return _playerControls.Player.Crouch.WasReleasedThisFrame();
+        }
+
     }
 }

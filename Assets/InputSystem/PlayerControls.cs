@@ -17,7 +17,7 @@ using UnityEngine.InputSystem.Utilities;
 
 namespace ProjectArtic.InputSystem
 {
-    public partial class @PlayerControls : IInputActionCollection2, IDisposable
+    public partial class @PlayerControls: IInputActionCollection2, IDisposable
     {
         public InputActionAsset asset { get; }
         public @PlayerControls()
@@ -69,6 +69,15 @@ namespace ProjectArtic.InputSystem
                     ""name"": ""Intract"",
                     ""type"": ""Button"",
                     ""id"": ""a9e3d89c-ab26-473d-8173-d39d211ca322"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Crouch"",
+                    ""type"": ""Button"",
+                    ""id"": ""61d9a1ad-dc9c-42e7-8b2c-cb133fd6cce6"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -229,6 +238,28 @@ namespace ProjectArtic.InputSystem
                     ""action"": ""Intract"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ebd5f779-ed38-4480-aa1a-963dd5e20abb"",
+                    ""path"": ""<Keyboard>/c"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""Crouch"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6f1e314f-cebf-4105-8173-2d5e6bc96f50"",
+                    ""path"": ""<Gamepad>/rightStickPress"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Crouch"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -280,6 +311,7 @@ namespace ProjectArtic.InputSystem
             m_Player_Sprint = m_Player.FindAction("Sprint", throwIfNotFound: true);
             m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
             m_Player_Intract = m_Player.FindAction("Intract", throwIfNotFound: true);
+            m_Player_Crouch = m_Player.FindAction("Crouch", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -346,6 +378,7 @@ namespace ProjectArtic.InputSystem
         private readonly InputAction m_Player_Sprint;
         private readonly InputAction m_Player_Jump;
         private readonly InputAction m_Player_Intract;
+        private readonly InputAction m_Player_Crouch;
         public struct PlayerActions
         {
             private @PlayerControls m_Wrapper;
@@ -355,6 +388,7 @@ namespace ProjectArtic.InputSystem
             public InputAction @Sprint => m_Wrapper.m_Player_Sprint;
             public InputAction @Jump => m_Wrapper.m_Player_Jump;
             public InputAction @Intract => m_Wrapper.m_Player_Intract;
+            public InputAction @Crouch => m_Wrapper.m_Player_Crouch;
             public InputActionMap Get() { return m_Wrapper.m_Player; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -379,6 +413,9 @@ namespace ProjectArtic.InputSystem
                 @Intract.started += instance.OnIntract;
                 @Intract.performed += instance.OnIntract;
                 @Intract.canceled += instance.OnIntract;
+                @Crouch.started += instance.OnCrouch;
+                @Crouch.performed += instance.OnCrouch;
+                @Crouch.canceled += instance.OnCrouch;
             }
 
             private void UnregisterCallbacks(IPlayerActions instance)
@@ -398,6 +435,9 @@ namespace ProjectArtic.InputSystem
                 @Intract.started -= instance.OnIntract;
                 @Intract.performed -= instance.OnIntract;
                 @Intract.canceled -= instance.OnIntract;
+                @Crouch.started -= instance.OnCrouch;
+                @Crouch.performed -= instance.OnCrouch;
+                @Crouch.canceled -= instance.OnCrouch;
             }
 
             public void RemoveCallbacks(IPlayerActions instance)
@@ -440,6 +480,7 @@ namespace ProjectArtic.InputSystem
             void OnSprint(InputAction.CallbackContext context);
             void OnJump(InputAction.CallbackContext context);
             void OnIntract(InputAction.CallbackContext context);
+            void OnCrouch(InputAction.CallbackContext context);
         }
     }
 }

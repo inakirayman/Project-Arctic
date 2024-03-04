@@ -44,6 +44,22 @@ public class PlayerMovement : MonoBehaviour
     private bool _exitingSlop = false;
 
 
+
+
+    #region Head Bob
+    [Header("Head Bob")]
+    public bool _enableHeadBob = true;
+    [SerializeField] private float _bobSpeed = 10f;
+    [SerializeField] private Vector3 _bobAmount = new Vector3(.15f, .05f, 0f);
+
+   
+    [SerializeField] private Transform _joint;
+    private Vector3 _jointOriginalPos;
+    private float _timer = 0;
+    private bool _isWalking = true;
+    #endregion
+
+    [Header("Referneces")]
     [SerializeField] private Transform _orientation;
     [SerializeField] private Vector3 _moveDirection;
     [SerializeField] private Rigidbody _rb;
@@ -60,6 +76,7 @@ public class PlayerMovement : MonoBehaviour
         _rb = GetComponent<Rigidbody>();
         _rb.freezeRotation = true;
         _startYScale = transform.localScale.y;
+        _jointOriginalPos = _joint.localPosition;
     }
 
     private void Update()
@@ -84,6 +101,11 @@ public class PlayerMovement : MonoBehaviour
     private void FixedUpdate()
     {
         MovePlayer();
+
+        if (_enableHeadBob)
+        {
+            HeadBob();
+        }
     }
 
     private void StateHandler()
@@ -115,6 +137,15 @@ public class PlayerMovement : MonoBehaviour
     private void MovePlayer()
     {
         _moveDirection = _orientation.forward * _verticalInput + _orientation.right * _horizontalInput;
+
+        if (_moveDirection == Vector3.zero)
+        {
+            _isWalking = false;
+        }
+        else
+        {
+            _isWalking = true;
+        }
 
         if (OnSlope() && !_exitingSlop)
         {
@@ -214,5 +245,33 @@ public class PlayerMovement : MonoBehaviour
     {
         return Vector3.ProjectOnPlane(_moveDirection, _slopeHit.normal).normalized;
         
+    }
+
+    private void HeadBob()
+    {
+        if (_isWalking)
+        {
+            if(_state == MovementState.Walking)
+            {
+                _timer += Time.deltaTime * _bobSpeed;
+            }
+            else if(_state == MovementState.Sprinting)
+            {
+                _timer += Time.deltaTime * (_bobSpeed + _moveSpeed);
+            }
+            else if(_state == MovementState.Crouching)
+            {
+                _timer += Time.deltaTime * (_bobSpeed * 0.5f);
+            }
+
+            // Applies HeadBob movement
+            _joint.localPosition = new Vector3(_jointOriginalPos.x + Mathf.Sin(_timer) * _bobAmount.x, _jointOriginalPos.y + Mathf.Sin(_timer) * _bobAmount.y, _jointOriginalPos.z + Mathf.Sin(_timer) * _bobAmount.z);
+        }
+        else
+        {
+            // Resets when play stops moving
+            _timer = 0;
+            _joint.localPosition = new Vector3(Mathf.Lerp(_joint.localPosition.x, _jointOriginalPos.x, Time.deltaTime * _bobSpeed), Mathf.Lerp(_joint.localPosition.y, _jointOriginalPos.y, Time.deltaTime * _bobSpeed), Mathf.Lerp(_joint.localPosition.z, _jointOriginalPos.z, Time.deltaTime * _bobSpeed));
+        }
     }
 }

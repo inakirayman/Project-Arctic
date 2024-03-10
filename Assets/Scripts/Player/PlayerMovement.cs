@@ -274,4 +274,19 @@ public class PlayerMovement : MonoBehaviour
             _joint.localPosition = new Vector3(Mathf.Lerp(_joint.localPosition.x, _jointOriginalPos.x, Time.deltaTime * _bobSpeed), Mathf.Lerp(_joint.localPosition.y, _jointOriginalPos.y, Time.deltaTime * _bobSpeed), Mathf.Lerp(_joint.localPosition.z, _jointOriginalPos.z, Time.deltaTime * _bobSpeed));
         }
     }
+
+
+
+
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawLine(_orientation.position, _orientation.position + _orientation.forward);
+        Gizmos.DrawRay(transform.position, Vector3.down * ((_PlayerHeight / 2) + 0.2f));
+
+
+    }
 }
+
+
